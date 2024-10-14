@@ -25,7 +25,8 @@ class DatabaseMethods {
           .get();
     } catch (e) {
       print("Error fetching user by email: $e");
-      return await FirebaseFirestore.instance.collection("Users")
+      return await FirebaseFirestore.instance
+          .collection("Users")
           .limit(0)
           .get(); // Return an empty QuerySnapshot
     }
@@ -39,7 +40,8 @@ class DatabaseMethods {
           .get();
     } catch (e) {
       print("Error fetching user by username: $e");
-      return await FirebaseFirestore.instance.collection("Users")
+      return await FirebaseFirestore.instance
+          .collection("Users")
           .limit(0)
           .get(); // Return an empty QuerySnapshot
     }
@@ -53,7 +55,8 @@ class DatabaseMethods {
           .get();
     } catch (e) {
       print("Error fetching user by Id: $e");
-      return await FirebaseFirestore.instance.collection("Users")
+      return await FirebaseFirestore.instance
+          .collection("Users")
           .limit(0)
           .get(); // Return an empty QuerySnapshot
     }
@@ -68,7 +71,8 @@ class DatabaseMethods {
           .get();
     } catch (e) {
       print("Error during search: $e");
-      return await FirebaseFirestore.instance.collection("Users")
+      return await FirebaseFirestore.instance
+          .collection("Users")
           .limit(0)
           .get(); // Return an empty QuerySnapshot
     }
@@ -145,9 +149,8 @@ class DatabaseMethods {
   }
 
   Future<void> updateLastMessageSent(String chatRoomId, Map<String, dynamic> lastMessageInfoMap) async {
-    DocumentReference docRef = FirebaseFirestore.instance
-        .collection('Chat-Rooms')
-        .doc(chatRoomId);
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('Chat-Rooms').doc(chatRoomId);
 
     try {
       // Check if the document exists
@@ -183,7 +186,8 @@ class DatabaseMethods {
           .get();
     } catch (e) {
       print("Error fetching user info: $e");
-      return await FirebaseFirestore.instance.collection("Users")
+      return await FirebaseFirestore.instance
+          .collection("Users")
           .limit(0)
           .get(); // Return an empty QuerySnapshot
     }
@@ -200,7 +204,8 @@ class DatabaseMethods {
 
   Future<bool> doesChatRoomExist(String chatRoomId) async {
     try {
-      final chatRoom = await FirebaseFirestore.instance.collection("Chat-Rooms")
+      final chatRoom = await FirebaseFirestore.instance
+          .collection("Chat-Rooms")
           .doc(chatRoomId)
           .get();
       return chatRoom.exists;
@@ -234,29 +239,29 @@ class DatabaseMethods {
     }
   }
 
-    Future<bool?> getHasDeliveredStatus(String chatRoomId, String messageId) async {
-      try {
-        // Fetch the specific message document by ID
-        DocumentSnapshot messageDoc = await FirebaseFirestore.instance
-            .collection('Chat-Rooms')
-            .doc(chatRoomId)
-            .collection('Chats')
-            .doc(messageId)
-            .get();
+  Future<bool?> getHasDeliveredStatus(String chatRoomId, String messageId) async {
+    try {
+      // Fetch the specific message document by ID
+      DocumentSnapshot messageDoc = await FirebaseFirestore.instance
+          .collection('Chat-Rooms')
+          .doc(chatRoomId)
+          .collection('Chats')
+          .doc(messageId)
+          .get();
 
-        // Check if the document exists
-        if (messageDoc.exists) {
-          // Return the hasBeenSeen status
-          return messageDoc['hasBeenDelivered'];
-        } else {
-          print("Message not found");
-          return null; // Message not found
-        }
-      } catch (e) {
-        print("Error fetching hasBeenDelivered status: $e");
-        return null; // Return null on error
+      // Check if the document exists
+      if (messageDoc.exists) {
+        // Return the hasBeenSeen status
+        return messageDoc['hasBeenDelivered'];
+      } else {
+        print("Message not found");
+        return null; // Message not found
       }
+    } catch (e) {
+      print("Error fetching hasBeenDelivered status: $e");
+      return null; // Return null on error
     }
+  }
 
   Future<bool> getUserOnlineStatusByUsername(String username) async {
     try {
@@ -282,6 +287,20 @@ class DatabaseMethods {
       // Error occurred while fetching user status
       print("Error fetching user online status: $e");
       return false; // Return false in case of an error
+    }
+  }
+
+  Future<void> updateProfilePhotoInFirestore(String userId, String newPhotoUrl) async {
+    try {
+      // Reference to Firestore user document
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      // Update the user's 'Photo' field in Firestore under Users > userId
+      await firestore.collection('Users').doc(userId).update({
+        'Photo': newPhotoUrl,  // Field being updated
+      });
+      print('Profile photo updated successfully in Firestore!');
+    } catch (e) {
+      print('Error updating profile photo in Firestore: $e');
     }
   }
 }
