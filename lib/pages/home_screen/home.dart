@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/pages/sign_in_page.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/internet_connectivity_checker.dart';
 import '../chat_screen/chat_screen.dart';
+import '../profile_photo_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -570,17 +572,47 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
           ),
         );
       },
-      leading: profilePicUrl == ""
-          ? const CircularProgressIndicator()
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Image.network(
-                profilePicUrl,
-                // height: 70,
-                // width: 70,
-                fit: BoxFit.cover,
+      leading: profilePicUrl == "" ? const CircularProgressIndicator() : GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ProfilePhotoView(
+                name: name,
+                photo: profilePicUrl,
               ),
             ),
+          );
+        },
+        child: Expanded(
+          // height: 50,
+          // width: 50,
+          child: ClipOval(
+            child: Stack(
+              alignment: Alignment.center, // Center the loading indicator
+              children: [
+                CachedNetworkImage(
+                  imageUrl: profilePicUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    height: 50,
+                    width: 50,
+                    color: Colors.grey[200], // Optional placeholder color
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    height: 50,
+                    width: 50,
+                    color: Colors.grey[200],
+                    child: const Icon(Icons.error, color: Colors.red), // Error widget
+                  ),
+                ),
+                // Optionally show a loading indicator if needed
+              ],
+            ),
+          ),
+        ),
+      ),
       title: Text(
         name,
         style: const TextStyle(fontSize: 18, color: Colors.black),
