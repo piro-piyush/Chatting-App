@@ -28,7 +28,7 @@ AppBar appBarChatScreen(BuildContext context, String name, String username, Stri
               size: 28, color: Color(0xFFFFFFFF)),
         ),
         const SizedBox(
-          width: 10,
+          width: 5,
         ),
         ClipOval(
           child: Image.network(
