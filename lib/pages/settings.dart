@@ -23,6 +23,12 @@ class _SettingsState extends State<Settings> {
     onTheLoad();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getTheSharedPref(); // Call this to fetch the latest data when the widget tree changes
+  }
+
   onTheLoad() async {
     await getTheSharedPref();
   }
