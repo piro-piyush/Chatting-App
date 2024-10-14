@@ -69,7 +69,7 @@ class _SignUpState extends State<SignUp> {
         await SharedPrefrenceHelper().saveUserDisplayName(nameController.text);
         await SharedPrefrenceHelper().saveUserEmail(emailController.text);
         await SharedPrefrenceHelper().saveUserPhoto(
-            "https://firebasestorage.googleapis.com/v0/b/chit-chat-app-593b5.appspot.com/o/default.jpeg?alt=media&token=89bae691-aeca-4b4f-90a6-d0a84baa6fa5");
+            "https://firebasestorage.googleapis.com/v0/b/chit-chat-app-81a16.appspot.com/o/default.png?alt=media&token=0326f5fd-fd0f-42e9-9a1e-88fcff4f1ff2");
         await SharedPrefrenceHelper()
             .saveUserName(updateUserName.toUpperCase());
 
