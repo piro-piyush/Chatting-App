@@ -52,6 +52,7 @@ class _SignInPageState extends State<SignInPage> {
 
       name = querySnapshot.docs[0]["Name"];
       username = querySnapshot.docs[0]["Username"];
+      email = querySnapshot.docs[0]["E-mail"];
       pic = querySnapshot.docs[0]["Photo"];
       id = querySnapshot.docs[0]["Id"];
 
@@ -101,6 +102,7 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _saveUserDetails() async {
     await SharedPrefrenceHelper().saveUserDisplayName(name);
     await SharedPrefrenceHelper().saveUserName(username);
+    await SharedPrefrenceHelper().saveUserEmail(email);
     await SharedPrefrenceHelper().saveUserId(id);
     await SharedPrefrenceHelper().saveUserPhoto(pic);
   }
