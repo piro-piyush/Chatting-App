@@ -1,4 +1,9 @@
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String? myName, myUsername, myPhoto, myId, myEmail;
   bool isLoading = true;
-  final ImagePicker _picker = ImagePicker();
+  File ? selectedImage;
 
   @override
   void initState() {
@@ -26,6 +31,38 @@ class _ProfileState extends State<Profile> {
   onTheLoad() async {
     await getTheSharedPref();
   }
+
+  Future<void> uploadProfilePhoto(String userId, File imageFile) async {
+    try {
+      // Create a reference to Firebase Storage
+      FirebaseStorage storage = FirebaseStorage.instance;
+
+      // Define the path where the image will be stored in Firebase Storage
+      String storagePath = 'Profile-photos/$userId/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      // Upload the image to Firebase Storage
+      UploadTask uploadTask = storage.ref(storagePath).putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+
+      // Get the download URL of the uploaded image
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      await DatabaseMethods().updateProfilePhotoInFirestore(userId, downloadUrl);
+
+      // Save the new download URL in shared preferences
+      await SharedPrefrenceHelper().saveUserPhoto(downloadUrl);
+
+      // Update the myPhoto variable
+      setState(() {
+        myPhoto = downloadUrl; // Update the local variable
+      });
+
+      print('Photo uploaded and URL stored successfully: $downloadUrl');
+    } catch (e) {
+      print('Error uploading photo: $e');
+    }
+  }
+
+
 
   getTheSharedPref() async {
     try {
@@ -81,18 +118,21 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> getImageFromCamera() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      print('Camera Image Path: ${image.path}');
-    }
+    final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnedImage == null)return;
+    setState(() {
+      selectedImage = File(returnedImage.path);
+    });
+      print('Camera Image Path: ${selectedImage!.path}');
   }
 
   Future<void> getImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      // Handle the selected image from the gallery
-      print('Gallery Image Path: ${image.path}');
-    }
+    final returnedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnedImage == null)return;
+    setState(() {
+      selectedImage = File(returnedImage.path);
+    });
+    print('Gallery Image Path: ${selectedImage!.path}');
   }
 
   @override
@@ -108,13 +148,14 @@ class _ProfileState extends State<Profile> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.28,
                 child: Center(
                   child: SizedBox(
-                    height: 220,
-                    width: 220,
+                    height: MediaQuery.of(context).size.height*0.25,
+                    width: MediaQuery.of(context).size.height*0.25,
                     child: Stack(
                       children: [
                         GestureDetector(
@@ -128,16 +169,57 @@ class _ProfileState extends State<Profile> {
                                           photo: myPhoto!,
                                         )));
                           },
-                          child: ClipOval(
-                            child: Image.network(
-                              myPhoto!,
-                              fit: BoxFit.cover,
+                            child: Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center, // Center the loading indicator
+                                  children: [
+                                    ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: myPhoto!,
+                                        fit: BoxFit.cover,
+                                        // Show a placeholder while the image is loading
+                                        placeholder: (context, url) {
+                                          // Set loading state to true when loading
+                                          isLoading = true;
+                                          return Container(color: Colors.grey[200]); // Optional placeholder color
+                                        },
+                                        errorWidget: (context, url, error) => Container(
+                                          color: Colors.grey[200], // Optional error color
+                                          child: Icon(Icons.error, color: Colors.red), // Error widget
+                                        ),
+                                        // Set loading state to false once the image loads
+                                        imageBuilder: (context, imageProvider) {
+                                          isLoading = false; // Image has loaded
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    // Show loading indicator if still loading
+                                    if (isLoading)
+                                      Center(
+                                        child: CircularProgressIndicator(), // Loading indicator
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+
                         ),
                         Positioned(
-                          bottom: 10,
-                          right: 20,
+                          bottom: 0,
+                          right: 0,
                           child: GestureDetector(
                             onTap: (){
                               showCustomBottomSheet(context);
@@ -280,7 +362,7 @@ class _ProfileState extends State<Profile> {
                                       Text(
                                         "Hey there! I am using WhatsApp.",
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -357,15 +439,23 @@ class _ProfileState extends State<Profile> {
         ));
   }
 
-  Widget buildProfilePhotoIcon({required String title,required IconData iconData}){
+  Widget buildProfilePhotoIcon({required String title, required IconData iconData}) {
     return GestureDetector(
-      onTap: (){
-        switch(title){
-        case "Camera":
-            getImageFromGallery();
-              break;
+      onTap: () async {
+        switch (title) {
+          case "Camera":
+            await getImageFromCamera();
+            if (selectedImage != null) {
+              // Only upload the photo if one has been selected
+              await uploadProfilePhoto(myId!, selectedImage!);
+            }
+            break;
           case "Gallery":
-            getImageFromGallery();
+            await getImageFromGallery();
+            if (selectedImage != null) {
+              // Only upload the photo if one has been selected
+              await uploadProfilePhoto(myId!, selectedImage!);
+            }
             break;
           default:
         }
@@ -376,18 +466,22 @@ class _ProfileState extends State<Profile> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-                border: Border.all(
-                    width: 1,
-                    color: Colors.grey
-                ),
-                borderRadius: BorderRadius.circular(30)
-            ),
-            child:  Center(
-              child: Icon(iconData,color: const Color(0xFF008069),),
+                border: Border.all(width: 1, color: Colors.grey),
+                borderRadius: BorderRadius.circular(30)),
+            child: Center(
+              child: Icon(
+                iconData,
+                color: const Color(0xFF008069),
+              ),
             ),
           ),
-          const SizedBox(height: 10,),
-          Text(title,style: const TextStyle(fontSize: 15),)
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 15),
+          )
         ],
       ),
     );
