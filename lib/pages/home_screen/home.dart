@@ -193,148 +193,148 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     return Scaffold(
       appBar: search
           ? AppBar(
-              backgroundColor: const Color(0xFF008069),
-              leading: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    search = false; // Exit search mode
-                  });
-                },
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-              title: TextField(
-                onChanged: (value) {
-                  initiateSearch(
-                      value.toUpperCase()); // Call search logic on text change
-                },
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-                decoration: const InputDecoration(
-                  hintText: "Search",
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  border: InputBorder.none,
-                ),
-              ),
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      search = false; // Exit search mode
-                    });
-                  },
-                  child: IconButton(
-                    icon: const Icon(Icons.send_rounded, color: Colors.white),
-                    onPressed: () {
-                      // Define the send action if necessary
-                    },
-                  ),
-                ),
-              ],
-            )
-          : AppBar(
-              backgroundColor: const Color(0xFF008069),
-              title: const Text(
-                "Chit Chat",
-                style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white),
-                  onPressed: () {
-                    setState(() {
-                      search = true; // Enable search mode
-                    });
-                  },
-                ),
-                const SizedBox(width: 5),
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    // Handle actions based on the selected value
-                    switch (value) {
-                      case 'New group':
-                        // Navigate or perform an action for New group
-                        break;
-                      case 'New broadcast':
-                        // Action for New broadcast
-                        break;
-                      case 'Linked devices':
-                        // Action for Linked devices
-                        break;
-                      case 'Starred messages':
-                        // Action for Starred messages
-                        break;
-                      case 'Payments':
-                        // Action for Payments
-                        break;
-                      case 'Settings':
-                        // Navigate to Settings page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const setting.Settings(),
-                          ),
-                        );
-                        break;
-                      case 'Logout':
-                        logOutDialogue(context);
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      const PopupMenuItem<String>(
-                        value: 'New group',
-                        child: Text('New group',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'New broadcast',
-                        child: Text('New broadcast',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Linked devices',
-                        child: Text('Linked devices',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Starred messages',
-                        child: Text('Starred messages',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Payments',
-                        child: Text('Payments',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Settings',
-                        child: Text('Settings',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Logout',
-                        child: Text('Logout',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ];
-                  },
-                  color: Colors.white, // White background for the menu
-                  icon: const Icon(Icons.more_vert,
-                      color: Colors.white), // Same icon color as AppBar
-                ),
-              ],
+        backgroundColor: const Color(0xFF008069),
+        leading: GestureDetector(
+          onTap: () {
+            setState(() {
+              search = false; // Exit search mode
+            });
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+        title: TextField(
+          onChanged: (value) {
+            initiateSearch(
+                value.toUpperCase()); // Call search logic on text change
+          },
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          decoration: const InputDecoration(
+            hintText: "Search",
+            hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+            border: InputBorder.none,
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                search = false; // Exit search mode
+              });
+            },
+            child: IconButton(
+              icon: const Icon(Icons.send_rounded, color: Colors.white),
+              onPressed: () {
+                // Define the send action if necessary
+              },
             ),
+          ),
+        ],
+      )
+          : AppBar(
+        backgroundColor: const Color(0xFF008069),
+        title: const Text(
+          "Chit Chat",
+          style: TextStyle(
+            color: Color(0xFFFFFFFF),
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              setState(() {
+                search = true; // Enable search mode
+              });
+            },
+          ),
+          const SizedBox(width: 5),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              // Handle actions based on the selected value
+              switch (value) {
+                case 'New group':
+                // Navigate or perform an action for New group
+                  break;
+                case 'New broadcast':
+                // Action for New broadcast
+                  break;
+                case 'Linked devices':
+                // Action for Linked devices
+                  break;
+                case 'Starred messages':
+                // Action for Starred messages
+                  break;
+                case 'Payments':
+                // Action for Payments
+                  break;
+                case 'Settings':
+                // Navigate to Settings page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const setting.Settings(),
+                    ),
+                  );
+                  break;
+                case 'Logout':
+                  logOutDialogue(context);
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'New group',
+                  child: Text('New group',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'New broadcast',
+                  child: Text('New broadcast',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Linked devices',
+                  child: Text('Linked devices',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Starred messages',
+                  child: Text('Starred messages',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Payments',
+                  child: Text('Payments',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Settings',
+                  child: Text('Settings',
+                      style: TextStyle(color: Colors.black)),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Logout',
+                  child: Text('Logout',
+                      style: TextStyle(color: Colors.black)),
+                ),
+              ];
+            },
+            color: Colors.white, // White background for the menu
+            icon: const Icon(Icons.more_vert,
+                color: Colors.white), // Same icon color as AppBar
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -350,27 +350,27 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget searchWidget() {
     return isLoading
         ? const Center(
-            child: CircularProgressIndicator(), // Loading indicator
-          )
+      child: CircularProgressIndicator(), // Loading indicator
+    )
         : tempSearchStore.isEmpty
-            ? const Center(
-                child: Text(
-                  "No users found.",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )
-            : ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                primary: false,
-                shrinkWrap: true,
-                children: tempSearchStore.map((element) {
-                  return buildResultCard(element); // Display search results
-                }).toList(),
-              );
+        ? const Center(
+      child: Text(
+        "No users found.",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    )
+        : ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      primary: false,
+      shrinkWrap: true,
+      children: tempSearchStore.map((element) {
+        return buildResultCard(element); // Display search results
+      }).toList(),
+    );
   }
 
   Widget chatRoomList() {
@@ -499,7 +499,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               setState(() {});
               // Generate the chat room ID using usernames
               var chatRoomId =
-                  DatabaseMethods().getChatRoomIdByUIDs(myId!, data["Id"]);
+              DatabaseMethods().getChatRoomIdByUIDs(myId!, data["Id"]);
               Map<String, dynamic> chatRoomInfoMap = {
                 "Users": [myUserName, data["Username"]],
               };
@@ -527,11 +527,11 @@ class ChatRoomListTile extends StatefulWidget {
 
   const ChatRoomListTile(
       {required this.lastMessage,
-      required this.chatRoomId,
-      required this.myUsername,
-      required this.time,
-      required this.myId,
-      super.key});
+        required this.chatRoomId,
+        required this.myUsername,
+        required this.time,
+        required this.myId,
+        super.key});
 
   @override
   State<ChatRoomListTile> createState() => _ChatRoomListTileState();
@@ -584,35 +584,35 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
             ),
           );
         },
-        child: Expanded(
-          // height: 50,
-          // width: 50,
+        child: CircleAvatar(
+          radius: 25, // Adjust the size of the avatar here
+          backgroundColor: Colors.grey[200], // Optional background color
           child: ClipOval(
-            child: Stack(
-              alignment: Alignment.center, // Center the loading indicator
-              children: [
-                CachedNetworkImage(
-                  imageUrl: profilePicUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    height: 50,
-                    width: 50,
-                    color: Colors.grey[200], // Optional placeholder color
-                    child: const Center(child: CircularProgressIndicator()),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    height: 50,
-                    width: 50,
-                    color: Colors.grey[200],
-                    child: const Icon(Icons.error, color: Colors.red), // Error widget
-                  ),
-                ),
-                // Optionally show a loading indicator if needed
-              ],
+            child: CachedNetworkImage(
+              imageUrl: profilePicUrl,
+              fit: BoxFit.cover,
+              width: 50,
+              // Ensure the image fits within the avatar's size
+              height: 50,
+              // Ensure the image fits within the avatar's size
+              placeholder: (context, url) => Container(
+                width: 50,
+                height: 50,
+                color: Colors.grey[200], // Optional placeholder color
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+              errorWidget: (context, url, error) => Container(
+                width: 50,
+                height: 50,
+                color: Colors.grey[200],
+                child: const Icon(Icons.error,
+                    color: Colors.red), // Error widget
+              ),
             ),
           ),
         ),
       ),
+
       title: Text(
         name,
         style: const TextStyle(fontSize: 18, color: Colors.black),
