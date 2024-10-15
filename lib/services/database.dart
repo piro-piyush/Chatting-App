@@ -150,7 +150,7 @@ class DatabaseMethods {
 
   Future<void> updateLastMessageSent(String chatRoomId, Map<String, dynamic> lastMessageInfoMap) async {
     DocumentReference docRef =
-        FirebaseFirestore.instance.collection('Chat-Rooms').doc(chatRoomId);
+    FirebaseFirestore.instance.collection('Chat-Rooms').doc(chatRoomId);
 
     try {
       // Check if the document exists
