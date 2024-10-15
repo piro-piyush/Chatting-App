@@ -47,9 +47,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> checkMessageStatus(String messageId) async {
     bool? hasSeen =
-        await DatabaseMethods().getHasSeenStatus(chatRoomId!, messageId);
+    await DatabaseMethods().getHasSeenStatus(chatRoomId!, messageId);
     bool? isDelivered =
-        await DatabaseMethods().getHasDeliveredStatus(chatRoomId!, messageId);
+    await DatabaseMethods().getHasDeliveredStatus(chatRoomId!, messageId);
     print(
         "Message seen status: $hasSeen ,Message delivered status: $isDelivered");
     setState(() {});
@@ -63,8 +63,8 @@ class _ChatScreenState extends State<ChatScreen> {
           .doc(chatRoomId)
           .collection('Chats')
           .where('Send-by',
-              isNotEqualTo:
-                  myUserName) // Filter messages sent by the other user
+          isNotEqualTo:
+          myUserName) // Filter messages sent by the other user
           .get();
 
       // Update each message to set 'hasBeenSeen' to true
@@ -154,15 +154,15 @@ class _ChatScreenState extends State<ChatScreen> {
       bool hasSeen, bool hasBeenDelivered) {
     return Row(
       mainAxisAlignment:
-          sendByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      sendByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         ChatBubble(
           // Clipper requires correct syntax, ternary operator needs the format for both bubble types.
           clipper: ChatBubbleClipper2(
               type:
-                  sendByMe ? BubbleType.sendBubble : BubbleType.receiverBubble),
+              sendByMe ? BubbleType.sendBubble : BubbleType.receiverBubble),
           backGroundColor:
-              sendByMe ? const Color(0xFFE7FEDB) : const Color(0xfff6f6f6),
+          sendByMe ? const Color(0xFFE7FEDB) : const Color(0xfff6f6f6),
           margin: const EdgeInsets.only(top: 10),
           child: IntrinsicWidth(
             // Ensure the container resizes based on content width
@@ -181,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: Colors.black87 // Adjust color based on sender
-                        ),
+                    ),
                   ),
                   const SizedBox(height: 0),
                   Row(
@@ -400,31 +400,31 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             isMic
                                 ? Row(
-                                    children: [
-                                      const Icon(Icons.attach_file,
-                                          color: Colors.grey),
-                                      const SizedBox(width: 15),
-                                      Container(
-                                        height: 25,
-                                        width: 25,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: const Icon(
-                                          Icons.currency_rupee_rounded,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      const Icon(Icons.camera_alt_outlined,
-                                          color: Colors.grey),
-                                    ],
-                                  )
+                              children: [
+                                const Icon(Icons.attach_file,
+                                    color: Colors.grey),
+                                const SizedBox(width: 15),
+                                Container(
+                                  height: 25,
+                                  width: 25,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius:
+                                    BorderRadius.circular(20),
+                                  ),
+                                  child: const Icon(
+                                    Icons.currency_rupee_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 15),
+                                const Icon(Icons.camera_alt_outlined,
+                                    color: Colors.grey),
+                              ],
+                            )
                                 : const Icon(Icons.attach_file,
-                                    size: 25, color: Colors.grey),
+                                size: 25, color: Colors.grey),
                           ],
                         ),
                       ),
@@ -452,7 +452,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: isMic
                           ? const Icon(Icons.mic, color: Colors.white, size: 28)
                           : const Icon(Icons.send_rounded,
-                              color: Colors.white, size: 25),
+                          color: Colors.white, size: 25),
                     ),
                   ),
                 )
